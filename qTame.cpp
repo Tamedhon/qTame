@@ -5,7 +5,7 @@
 qTame::qTame(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::qTame),
-    telnet(this)
+    telnet(new QTelnet(this))
 {
     ui->setupUi(this);
 
@@ -36,16 +36,17 @@ qTame::qTame(QWidget *parent) :
 
 qTame::~qTame()
 {
-    telnet.disconnectFromHost();
+    telnet->disconnectFromHost();
     delete settings;
     delete crypt;
+    delete telnet;
     delete ui;
 }
 
 void qTame::Connects()
 {
-    connect(&telnet, SIGNAL(newData(const char*,int)), this, SLOT(addText(const char*,int)));
-    connect(&telnet, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
+    connect(telnet, SIGNAL(newData(const char*,int)), this, SLOT(addText(const char*,int)));
+    connect(telnet, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
     connect(ui->cbCmd, SIGNAL(command(QString)), this, SLOT(onCommand(QString)));
     connect(ui->btnClose, SIGNAL(clicked()), this, SLOT(btnClose()));
     connect(ui->btnFrei1, SIGNAL(clicked()), this, SLOT(btnFrei1()));
@@ -137,15 +138,15 @@ void qTame::onStateChanged(QAbstractSocket::SocketState s)
         ui->btConnect->setText( tr("Verbinde") );
         break;
     case QAbstractSocket::HostLookupState:
-        setStatusText( tr("<qTame> DNS Auflösung %1").arg(telnet.peerName()), true );
+        setStatusText( tr("<qTame> DNS Auflösung %1").arg(telnet->peerName()), true );
         ui->btConnect->setText( tr("Beenden") );
         break;
     case QAbstractSocket::ConnectingState:
-        //        setStatusText( tr("Verbinde zu %1").arg(telnet.peerInfo()), true );
+        //        setStatusText( tr("Verbinde zu %1").arg(telnet->peerInfo()), true );
         //        ui->btConnect->setText( tr("Trennen") );
         break;
     case QAbstractSocket::ConnectedState:
-        setStatusText( tr("<qTame> Verbunden zu %1").arg(telnet.peerInfo()), true );
+        setStatusText( tr("<qTame> Verbunden zu %1").arg(telnet->peerInfo()), true );
         ui->btConnect->setText( tr("Trennen") );
         break;
     case QAbstractSocket::BoundState:
@@ -177,19 +178,19 @@ void qTame::setStatusText(const QString &msg, bool onQTelnetTester)
 
 void qTame::onCommand(const QString &cmd)
 {
-    if( telnet.isConnected() )
+    if( telnet->isConnected() )
     {
-        telnet.sendData(cmd.toUtf8());
-        telnet.sendData("\n");
+        telnet->sendData(cmd.toUtf8());
+        telnet->sendData("\n");
     }
 }
 
 void qTame::on_btConnect_clicked()
 {
-    if( telnet.isConnected() )
-        telnet.disconnectFromHost();
+    if( telnet->isConnected() )
+        telnet->disconnectFromHost();
     else
-        telnet.connectToHost(ui->txtAddr->text(), ui->sbPort->value());
+        telnet->connectToHost(ui->txtAddr->text(), ui->sbPort->value());
 }
 
 void qTame::addText(const char *msg, int count)
@@ -207,10 +208,10 @@ void qTame::btnFrei1()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet.isConnected() )
+    if( telnet->isConnected() )
     {
-        telnet.sendData(settings->value("button1cmd").toString().toUtf8());
-        telnet.sendData("\n");
+        telnet->sendData(settings->value("button1cmd").toString().toUtf8());
+        telnet->sendData("\n");
     }
 
     settings->endGroup();
@@ -220,10 +221,10 @@ void qTame::btnFrei2()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet.isConnected() )
+    if( telnet->isConnected() )
     {
-        telnet.sendData(settings->value("button2cmd").toString().toUtf8());
-        telnet.sendData("\n");
+        telnet->sendData(settings->value("button2cmd").toString().toUtf8());
+        telnet->sendData("\n");
     }
 
     settings->endGroup();
@@ -233,10 +234,10 @@ void qTame::btnFrei3()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet.isConnected() )
+    if( telnet->isConnected() )
     {
-        telnet.sendData(settings->value("button3cmd").toString().toUtf8());
-        telnet.sendData("\n");
+        telnet->sendData(settings->value("button3cmd").toString().toUtf8());
+        telnet->sendData("\n");
     }
 
     settings->endGroup();
@@ -246,10 +247,10 @@ void qTame::btnFrei4()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet.isConnected() )
+    if( telnet->isConnected() )
     {
-        telnet.sendData(settings->value("button4cmd").toString().toUtf8());
-        telnet.sendData("\n");
+        telnet->sendData(settings->value("button4cmd").toString().toUtf8());
+        telnet->sendData("\n");
     }
 
     settings->endGroup();
@@ -259,10 +260,10 @@ void qTame::btnFrei5()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet.isConnected() )
+    if( telnet->isConnected() )
     {
-        telnet.sendData(settings->value("button5cmd").toString().toUtf8());
-        telnet.sendData("\n");
+        telnet->sendData(settings->value("button5cmd").toString().toUtf8());
+        telnet->sendData("\n");
     }
 
     settings->endGroup();

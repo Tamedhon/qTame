@@ -22,7 +22,7 @@ class qTame : public QMainWindow
     Q_OBJECT
 
     Ui::qTame *ui;
-    QTelnet telnet;
+    QTelnet *telnet;
 
 
 public:
