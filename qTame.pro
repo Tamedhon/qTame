@@ -11,16 +11,32 @@ CONFIG += c++17
 TARGET = qTame
 TEMPLATE = app
 
+RC_ICONS = logo.ico
+VERSION = 1.0.0.0
+QMAKE_TARGET_COMPANY = Tamedhon
+QMAKE_TARGET_PRODUCT = Tamedhon qTame
+QMAKE_TARGET_DESCRIPTION = Tamedhon qTame MUD Client
+QMAKE_TARGET_COPYRIGHT = (c) 2024 - Aloy
+
 
 SOURCES += main.cpp\
     QTelnet.cpp \
     QCmdWidget.cpp \
-    qTame.cpp
+    crypto.cpp \
+    qTame.cpp \
+    qaesencryption.cpp
 
 HEADERS  += \
+    EnumHelper.h \
     QTelnet.h \
     QCmdWidget.h \
-    qTame.h
+    aesni/aesni-enc-cbc.h \
+    aesni/aesni-enc-ecb.h \
+    aesni/aesni-key-exp.h \
+    aesni/aesni-key-init.h \
+    crypto.h \
+    qTame.h \
+    qaesencryption.h
 
 FORMS    += \
     qTame.ui

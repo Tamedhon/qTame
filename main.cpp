@@ -1,11 +1,12 @@
 #include "qTame.h"
 #include <QApplication>
+#include <QRandomGenerator>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-    a.setOrganizationName("Tamedhon");
-    a.setApplicationName("qTame");
+
+    QRandomGenerator::securelySeeded();
 
     qTame w;
 	w.show();
