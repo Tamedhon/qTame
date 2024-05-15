@@ -44,7 +44,10 @@ public:
     explicit qTame(QWidget *parent = 0);
     ~qTame();   
 
-private:   
+private:
+    bool user = false;
+    bool password = false;
+
     QSettings *settings;
     Crypto::Crypto *crypt;
 

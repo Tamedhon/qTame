@@ -41,7 +41,7 @@ void QCmdWidget::keyPressEvent(QKeyEvent *e)
 	{
 		addItem(currentText());
         lineEdit()->selectAll();
-        clearEditText();
+        //clearEditText();
 		emit command(currentText());     
 	}
 	else

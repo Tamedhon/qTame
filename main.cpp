@@ -55,7 +55,7 @@ void DefaultSettings()
     if(settings->value("button2text").toString() == "")
         settings->setValue("button2text", "Ausrüstung");
     if(settings->value("button2cmd").toString() == "")
-        settings->setValue("button2cmd", "aus");
+        settings->setValue("button2cmd", "ausruestung");
     if(settings->value("button3text").toString() == "")
         settings->setValue("button3text", "Attribute");
     if(settings->value("button3cmd").toString() == "")

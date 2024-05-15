@@ -1,6 +1,8 @@
 #include "qTame.h"
 #include "ui_qTame.h"
 
+#include <QThread>
+
 qTame::qTame(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::qTame),
@@ -132,6 +134,7 @@ void qTame::onStateChanged(QAbstractSocket::SocketState s)
 
 void qTame::setStatusText(const QString &msg, bool onQTelnetTester)
 {
+
     if( onQTelnetTester )
     {
         addText(msg.toUtf8(), msg.length()+1);
@@ -153,13 +156,46 @@ void qTame::onCommand(const QString &cmd)
 void qTame::on_btConnect_clicked()
 {
     if( telnet->isConnected() )
+    {
+        user = false;
+        password = false;
         telnet->disconnectFromHost();
+    }
     else
         telnet->connectToHost(ui->txtAddr->text(), ui->sbPort->value());
 }
 
 void qTame::addText(const char *msg, int count)
-{
+{   
+    //autologin
+    settings->beginGroup("User");
+
+    if(settings->value("autologin").toInt() == 1 &&
+            settings->value("login").toString() != "" &&
+            settings->value("pass").toString() != "")
+    {
+        if(QString::fromUtf8(msg).contains("Spieler) ?") && !user)
+        {
+            user = true;
+            if( telnet->isConnected() )
+            {
+                telnet->sendData(settings->value("login").toString().toUtf8());
+                telnet->sendData("\n");
+            }
+        }
+
+        if(QString::fromUtf8(msg).contains("Password") && !password)
+        {
+            password = true;
+            if( telnet->isConnected() )
+            {
+                telnet->sendData(crypt->DecryptBase64(settings->value("pass").toString()).toUtf8());
+                telnet->sendData("\n");
+            }
+        }
+    }
+    settings->endGroup(); //autologin ende
+
     ui->txtConsole->insertPlainText( QByteArray(msg, count) );
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 }
@@ -546,7 +582,7 @@ void qTame::keyPressEvent(QKeyEvent *event)
     }
 
     if((event->modifiers() & Qt::KeypadModifier) && (event->modifiers() & Qt::AltModifier))
-    {        
+    {
         if(event->key() == Qt::Key_2)
         {
             if( telnet->isConnected() )
