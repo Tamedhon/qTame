@@ -211,8 +211,11 @@ void qTame::btn1()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button1cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button1cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -224,8 +227,11 @@ void qTame::btn2()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button2cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button2cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -237,8 +243,11 @@ void qTame::btn3()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button3cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button3cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -250,8 +259,11 @@ void qTame::btn4()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button4cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button4cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -263,8 +275,11 @@ void qTame::btn5()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button5cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button5cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -276,8 +291,11 @@ void qTame::btn6()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button6cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button6cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -289,8 +307,11 @@ void qTame::btn7()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button7cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button7cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -302,8 +323,11 @@ void qTame::btn8()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button8cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button8cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -315,8 +339,11 @@ void qTame::btn9()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button9cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button9cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -328,8 +355,11 @@ void qTame::btn10()
 
     if( telnet->isConnected() )
     {
-        telnet->sendData(settings->value("button10cmd").toString().toUtf8());
-        telnet->sendData("\n");
+        foreach(QString str, settings->value("button10cmd").toString().split(";"))
+        {
+            telnet->sendData(str.toUtf8());
+            telnet->sendData("\n");
+        }
     }
 
     settings->endGroup();
@@ -372,6 +402,8 @@ void qTame::openFunktionen()
                 "<qTame> => Cursortasten navigieren durch die Befehlshistory\n"
                 "<qTame> => Änderungen von Adresse, Port und TLS werden automatisch sofort gespeichert\n"
                 "<qTame> => Änderungen im Einstellungsmenü werden automatisch sofort gespeichert\n"
+                "<qTame> => In den Einstellungen können Befehle auf den Buttons mit ';' verkettet werden.\n"
+                "           z.B. 'sag test;sag test2'\n"
                 "<qTame> => !!! Autologin funktioniert nur MIT hinterlegten Logindaten!\n"
                 "<qTame> => !!! TLS funktioniert nur, wenn es der Server unterstützt!\n\n"
                 );
