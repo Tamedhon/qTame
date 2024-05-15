@@ -2,10 +2,19 @@
 
 namespace Crypto
 {
-    QString Crypto::EncryptBase64(QString text)
+    Crypto::Crypto()
     {
         settings = new QSettings(QCoreApplication::applicationDirPath()+"/qTame.td", QSettings::IniFormat);
         settings->setIniCodec("UTF-8");
+    }
+
+    Crypto::~Crypto()
+    {
+        delete settings;
+    }
+
+    QString Crypto::EncryptBase64(QString text)
+    {
         settings->beginGroup("User");
         QString iv = generateIv();
         QByteArray hashKey = QCryptographicHash::hash(settings->value("key").toString().toLocal8Bit(), QCryptographicHash::Sha256);
@@ -20,9 +29,7 @@ namespace Crypto
     }
 
     QString Crypto::DecryptBase64(QString text)
-    {
-        settings = new QSettings(QCoreApplication::applicationDirPath()+"/qTame.td", QSettings::IniFormat);
-        settings->setIniCodec("UTF-8");
+    {  
         settings->beginGroup("User");
         QByteArray hashKey = QCryptographicHash::hash(settings->value("key").toString().toLocal8Bit(), QCryptographicHash::Sha256);
         settings->endGroup();

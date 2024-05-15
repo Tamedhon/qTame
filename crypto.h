@@ -11,6 +11,8 @@ namespace Crypto
     class Crypto
     {
     public:
+        Crypto();
+        ~Crypto();
         /*! \brief Create encrypted string using individual initial vector.*/
         QString EncryptBase64(QString text);
 

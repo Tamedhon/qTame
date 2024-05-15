@@ -2,4 +2,8 @@
     <qresource prefix="/">
         <file>logo.png</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file>Consolas.ttf</file>
+        <file>carolingia.ttf</file>
+    </qresource>
 </RCC>

@@ -11,23 +11,29 @@ CONFIG += c++17
 TARGET = qTame
 TEMPLATE = app
 
-RC_ICONS = logo.ico
-VERSION = 1.0.0.0
-QMAKE_TARGET_COMPANY = Tamedhon
-QMAKE_TARGET_PRODUCT = Tamedhon qTame
-QMAKE_TARGET_DESCRIPTION = Tamedhon qTame MUD Client
-QMAKE_TARGET_COPYRIGHT = (c) 2024 - Aloy
+VERSION = 1.0.0
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+win32
+{
+    RC_ICONS = logo.ico
+    QMAKE_TARGET_COMPANY = Tamedhon
+    QMAKE_TARGET_PRODUCT = Tamedhon qTame
+    QMAKE_TARGET_DESCRIPTION = Tamedhon qTame MUD Client
+    QMAKE_TARGET_COPYRIGHT = (c) 2024 - Aloy
+}
 
 
 SOURCES += main.cpp\
     QTelnet.cpp \
     QCmdWidget.cpp \
     crypto.cpp \
+    info.cpp \
     qTame.cpp \
-    qaesencryption.cpp
+    qaesencryption.cpp \
+    settings.cpp
 
 HEADERS  += \
-    EnumHelper.h \
     QTelnet.h \
     QCmdWidget.h \
     aesni/aesni-enc-cbc.h \
@@ -35,11 +41,16 @@ HEADERS  += \
     aesni/aesni-key-exp.h \
     aesni/aesni-key-init.h \
     crypto.h \
+    info.h \
     qTame.h \
-    qaesencryption.h
+    qaesencryption.h \
+    qtextconsole.h \
+    settings.h
 
 FORMS    += \
-    qTame.ui
+    info.ui \
+    qTame.ui \
+    settings.ui
 
 RESOURCES += \
     resources.qrc

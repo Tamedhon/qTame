@@ -1,0 +1,29 @@
+#ifndef INFO_H
+#define INFO_H
+
+#include <QDialog>
+#include <QKeyEvent>
+
+namespace Ui {
+class Info;
+}
+
+class Info : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit Info(QWidget *parent = nullptr);
+    ~Info();
+
+private:
+    Ui::Info *ui;
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
+private slots:
+    void btnClose();
+};
+
+#endif // INFO_H

@@ -40,8 +40,9 @@ void QCmdWidget::keyPressEvent(QKeyEvent *e)
 	if( ((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && !currentText().isEmpty() )
 	{
 		addItem(currentText());
-		lineEdit()->selectAll();
-		emit command(currentText());
+        lineEdit()->selectAll();
+        clearEditText();
+		emit command(currentText());     
 	}
 	else
 		QComboBox::keyPressEvent(e);

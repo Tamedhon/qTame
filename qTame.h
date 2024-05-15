@@ -3,12 +3,18 @@
 
 #include <QMainWindow>
 #include <QSettings>
-#include "QTelnet.h"
 #include <QUuid>
 #include <QScrollBar>
 #include <QCoreApplication>
+#include <QKeyEvent>
+#include <QDesktopWidget>
+#include <QMessageBox>
+#include <QScreen>
+#include <QTextBrowser>
+#include "QTelnet.h"
 #include "crypto.h"
-#include "EnumHelper.h"
+#include "info.h"
+#include "settings.h"
 
 
 namespace Ui
@@ -16,14 +22,14 @@ namespace Ui
 class qTame;
 }
 
-
 class qTame : public QMainWindow
 {
     Q_OBJECT
 
     Ui::qTame *ui;
     QTelnet *telnet;
-
+    Info *info;
+    Settings *set;
 
 public:
     enum class Themes
@@ -44,7 +50,12 @@ private:
 
     void Connects();
     void SetMode();
-    void DefaultSettings();
+    void moveCursorToEnd();
+    void LoadButtonTexts();
+    void LoadValues();
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void onStateChanged(QAbstractSocket::SocketState s);
@@ -53,11 +64,21 @@ private slots:
     void onCommand(const QString &cmd);
 
     void btnClose();
-    void btnFrei1();
-    void btnFrei2();
-    void btnFrei3();
-    void btnFrei4();
-    void btnFrei5();
+    void btn1();
+    void btn2();
+    void btn3();
+    void btn4();
+    void btn5();
+    void btn6();
+    void btn7();
+    void btn8();
+    void btn9();
+    void btn10();
+
+    void openInfo();
+    void openFunktionen();
+    void openNavigation();
+    void openSettings();
 
     void onCursorUp();
     void onCursorDown();
@@ -65,10 +86,12 @@ private slots:
     void addressChanged(QString txt);
     void portChanged(int val);
     void tlsChanged(int val);
+    void autologinChanged(int val);
 
 public slots:
     void setStatusText(const QString &msg, bool onMainWindow = false);
     void addText(const char *msg, int count);
+
 };
 
 #endif // QTAME_H

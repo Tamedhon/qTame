@@ -6,20 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1014</width>
-    <height>1050</height>
+    <width>1560</width>
+    <height>1159</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>qTame</string>
+   <string>Tamedhon qTame</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
     <normaloff>:/logo.png</normaloff>:/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_3">
-    <item row="5" column="0" colspan="3">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QTextConsole" name="txtConsole"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QCmdWidget" name="cbCmd">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="3">
        <widget class="QPushButton" name="btConnect">
@@ -40,7 +55,7 @@
        </widget>
       </item>
       <item row="1" column="4">
-       <widget class="QPushButton" name="btnSkills">
+       <widget class="QPushButton" name="btn5">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -53,12 +68,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Fertigkeiten</string>
+         <string>Button 5</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QPushButton" name="btnInv">
+       <widget class="QPushButton" name="btn1">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -71,12 +86,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Inventar</string>
+         <string>Button 1</string>
         </property>
        </widget>
       </item>
       <item row="2" column="4">
-       <widget class="QPushButton" name="btnFrei5">
+       <widget class="QPushButton" name="btn10">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -89,12 +104,12 @@
          </font>
         </property>
         <property name="text">
-         <string>freier Button 5</string>
+         <string>Button 10</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QPushButton" name="btnAttr">
+       <widget class="QPushButton" name="btn3">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -107,12 +122,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Attribute</string>
+         <string>Button 3</string>
         </property>
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="QPushButton" name="btnFrei3">
+       <widget class="QPushButton" name="btn8">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -125,7 +140,7 @@
          </font>
         </property>
         <property name="text">
-         <string>freier Button 3</string>
+         <string>Button 8</string>
         </property>
        </widget>
       </item>
@@ -145,7 +160,7 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="QPushButton" name="btnQuests">
+       <widget class="QPushButton" name="btn4">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -158,12 +173,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Quests</string>
+         <string>Button 4</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QPushButton" name="btnFrei2">
+       <widget class="QPushButton" name="btn7">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -176,12 +191,12 @@
          </font>
         </property>
         <property name="text">
-         <string>freier Button 2</string>
+         <string>Button 7</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QPushButton" name="btnFrei1">
+       <widget class="QPushButton" name="btn6">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -194,12 +209,12 @@
          </font>
         </property>
         <property name="text">
-         <string>freier Button 1</string>
+         <string>Button 6</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QPushButton" name="btnEquip">
+       <widget class="QPushButton" name="btn2">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -212,7 +227,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Ausrüstung</string>
+         <string>Button 2</string>
         </property>
        </widget>
       </item>
@@ -235,7 +250,7 @@
        </widget>
       </item>
       <item row="2" column="3">
-       <widget class="QPushButton" name="btnFrei4">
+       <widget class="QPushButton" name="btn9">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -248,22 +263,7 @@
          </font>
         </property>
         <property name="text">
-         <string>freier Button 4</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QCheckBox" name="cbTLS">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string>TLS</string>
+         <string>Button 9</string>
         </property>
        </widget>
       </item>
@@ -285,32 +285,41 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QCheckBox" name="cbTLS">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>TLS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbAutologin">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>Autologin</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
-    </item>
-    <item row="4" column="0" colspan="3">
-     <widget class="QCmdWidget" name="cbCmd">
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="editable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="4" colspan="3">
-     <widget class="QTextEdit" name="txtConsole">
-      <property name="font">
-       <font>
-        <family>Sans Serif</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="textInteractionFlags">
-       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -319,7 +328,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1014</width>
+     <width>1560</width>
      <height>35</height>
     </rect>
    </property>
@@ -337,12 +346,37 @@
     <property name="title">
      <string>Datei</string>
     </property>
-    <addaction name="actionUser_Autologin"/>
-    <addaction name="actionZuweisung_freie_Buttons"/>
+    <addaction name="actionEinstellungen"/>
     <addaction name="separator"/>
     <addaction name="actionBeenden"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>?</string>
+    </property>
+    <widget class="QMenu" name="menuHilfe">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>Hilfe</string>
+     </property>
+     <addaction name="actionFunktionen"/>
+     <addaction name="actionNavigation"/>
+    </widget>
+    <addaction name="menuHilfe"/>
+    <addaction name="separator"/>
+    <addaction name="actionInfo"/>
+   </widget>
    <addaction name="menuDatei"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="font">
@@ -360,10 +394,42 @@
    <property name="text">
     <string>Beenden</string>
    </property>
+   <property name="shortcut">
+    <string>Esc</string>
+   </property>
   </action>
   <action name="actionZuweisung_freie_Buttons">
    <property name="text">
     <string>Zuweisung freie Buttons</string>
+   </property>
+  </action>
+  <action name="actionEinstellungen">
+   <property name="text">
+    <string>Einstellungen</string>
+   </property>
+   <property name="shortcut">
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="text">
+    <string>Info</string>
+   </property>
+  </action>
+  <action name="actionFunktionen">
+   <property name="text">
+    <string>Funktionen</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionNavigation">
+   <property name="text">
+    <string>Navigation</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
    </property>
   </action>
  </widget>
@@ -374,7 +440,29 @@
    <extends>QComboBox</extends>
    <header>QCmdWidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>QTextConsole</class>
+   <extends>QTextBrowser</extends>
+   <header>qtextconsole.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbCmd</tabstop>
+  <tabstop>txtAddr</tabstop>
+  <tabstop>sbPort</tabstop>
+  <tabstop>btConnect</tabstop>
+  <tabstop>btnClose</tabstop>
+  <tabstop>btn1</tabstop>
+  <tabstop>btn2</tabstop>
+  <tabstop>btn3</tabstop>
+  <tabstop>btn4</tabstop>
+  <tabstop>btn5</tabstop>
+  <tabstop>btn6</tabstop>
+  <tabstop>btn7</tabstop>
+  <tabstop>btn8</tabstop>
+  <tabstop>btn9</tabstop>
+  <tabstop>btn10</tabstop>
+ </tabstops>
  <resources>
   <include location="resources.qrc"/>
  </resources>

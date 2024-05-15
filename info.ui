@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Info</class>
+ <widget class="QDialog" name="Info">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>543</width>
+    <height>736</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Info</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/logo.png</normaloff>:/logo.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lblTitle">
+     <property name="text">
+      <string>Tamedhon qTame</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lblLogo">
+     <property name="minimumSize">
+      <size>
+       <width>500</width>
+       <height>500</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>500</width>
+       <height>500</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="resources.qrc">:/logo.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lblC">
+     <property name="text">
+      <string>(c) 2024 - Aloy</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>128</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClose">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>225</width>
+         <height>62</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>225</width>
+         <height>62</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Schließen</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>123</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
