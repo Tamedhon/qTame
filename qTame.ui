@@ -432,7 +432,7 @@
     <string>Einstellungen</string>
    </property>
    <property name="shortcut">
-    <string>F10</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionInfo">
@@ -445,7 +445,7 @@
     <string>Funktionen</string>
    </property>
    <property name="shortcut">
-    <string>F1</string>
+    <string>F11</string>
    </property>
   </action>
   <action name="actionNavigation">
@@ -453,7 +453,7 @@
     <string>Navigation</string>
    </property>
    <property name="shortcut">
-    <string>F2</string>
+    <string>F12</string>
    </property>
   </action>
  </widget>

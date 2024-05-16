@@ -236,8 +236,8 @@ void qTame::addText(const char *msg, int count)
     }
     settings->endGroup(); //autologin ende
 
-    //ui->txtConsole->insertHtml(VT100_ANSI_2_HTML(QByteArray(msg, count)));
-    ui->txtConsole->insertPlainText(QByteArray(msg, count));
+    ui->txtConsole->insertHtml(VT100_ANSI_2_HTML(QByteArray(msg, count)));
+//    ui->txtConsole->insertPlainText(QByteArray(msg, count));
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 }
 
@@ -533,6 +533,66 @@ void qTame::keyPressEvent(QKeyEvent *event)
         CursorDown();
     }
 
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F1)
+    {
+        btn1();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F2)
+    {
+        btn2();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F3)
+    {
+        btn3();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F4)
+    {
+        btn4();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F5)
+    {
+        btn5();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F6)
+    {
+        btn6();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F7)
+    {
+        btn7();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F8)
+    {
+        btn8();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F9)
+    {
+        btn9();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_F10)
+    {
+        btn10();
+    }
+
     if(event->modifiers() & Qt::KeypadModifier && !(event->modifiers() & Qt::ControlModifier) && !(event->modifiers() & Qt::AltModifier))
     {
         if(event->key() == Qt::Key_1)
@@ -686,16 +746,16 @@ void qTame::LoadButtonTexts()
 {
     settings->beginGroup("Buttons");
 
-    ui->btn1->setText(settings->value("button1text").toString());
-    ui->btn2->setText(settings->value("button2text").toString());
-    ui->btn3->setText(settings->value("button3text").toString());
-    ui->btn4->setText(settings->value("button4text").toString());
-    ui->btn5->setText(settings->value("button5text").toString());
-    ui->btn6->setText(settings->value("button6text").toString());
-    ui->btn7->setText(settings->value("button7text").toString());
-    ui->btn8->setText(settings->value("button8text").toString());
-    ui->btn9->setText(settings->value("button9text").toString());
-    ui->btn10->setText(settings->value("button10text").toString());
+    ui->btn1->setText("F1: " + settings->value("button1text").toString());
+    ui->btn2->setText("F2: " + settings->value("button2text").toString());
+    ui->btn3->setText("F3: " + settings->value("button3text").toString());
+    ui->btn4->setText("F4: " + settings->value("button4text").toString());
+    ui->btn5->setText("F5: " + settings->value("button5text").toString());
+    ui->btn6->setText("F6: " + settings->value("button6text").toString());
+    ui->btn7->setText("F7: " + settings->value("button7text").toString());
+    ui->btn8->setText("F8: " + settings->value("button8text").toString());
+    ui->btn9->setText("F9: " + settings->value("button9text").toString());
+    ui->btn10->setText("F10: " + settings->value("button10text").toString());
 
     settings->endGroup();
 }
@@ -761,7 +821,7 @@ QString qTame::VT100_ANSI_2_HTML(QString input)
 {
     QString output;
 
-    output = "<pre>"+input.replace("\n","<br>").replace(" ","&nbsp;").replace("<qTame>","&lt;qTame&gt;")+"</pre>";
+    output = input.replace("\n","<br>").replace(" ","&nbsp;").replace("<qTame>","&lt;qTame&gt;");
 
     return output;
 }
