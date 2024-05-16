@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1560</width>
+    <width>1459</width>
     <height>1159</height>
    </rect>
   </property>
@@ -317,6 +317,21 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QCheckBox" name="cbLog">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>Log</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -328,7 +343,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1560</width>
+     <width>1459</width>
      <height>35</height>
     </rect>
    </property>

@@ -11,6 +11,8 @@
 #include <QMessageBox>
 #include <QScreen>
 #include <QTextBrowser>
+#include <QDateTime>
+#include <QDir>
 #include "QTelnet.h"
 #include "crypto.h"
 #include "info.h"
@@ -47,15 +49,19 @@ public:
 private:
     bool user = false;
     bool password = false;
+    bool writeLog = false;
 
     QSettings *settings;
     Crypto::Crypto *crypt;
+    QFile *log = nullptr;
 
     void Connects();
     void SetMode();
     void moveCursorToEnd();
     void LoadButtonTexts();
     void LoadValues();
+    void TelnetCommand(QString cmd);
+    void WriteLog(QString txt);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -90,6 +96,7 @@ private slots:
     void portChanged(int val);
     void tlsChanged(int val);
     void autologinChanged(int val);
+    void logChanged(int val);
 
 public slots:
     void setStatusText(const QString &msg, bool onMainWindow = false);

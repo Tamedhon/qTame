@@ -35,6 +35,8 @@ qTame::~qTame()
     delete telnet;
     delete info;
     delete set;
+    if(log != nullptr)
+        delete log;
     delete ui;
 }
 
@@ -61,6 +63,7 @@ void qTame::Connects()
     connect(ui->sbPort, SIGNAL(valueChanged(int)), this, SLOT(portChanged(int)));
     connect(ui->cbTLS, SIGNAL(stateChanged(int)), this, SLOT(tlsChanged(int)));
     connect(ui->cbAutologin, SIGNAL(stateChanged(int)), this, SLOT(autologinChanged(int)));
+    connect(ui->cbLog, SIGNAL(stateChanged(int)), this, SLOT(logChanged(int)));
 
     connect(ui->actionBeenden, SIGNAL(triggered(bool)), this, SLOT(btnClose()));
     connect(ui->actionInfo, SIGNAL(triggered(bool)), this, SLOT(openInfo()));
@@ -167,6 +170,11 @@ void qTame::on_btConnect_clicked()
 
 void qTame::addText(const char *msg, int count)
 {   
+    if(writeLog)
+    {
+        WriteLog(QByteArray(msg, count));
+    }
+
     //autologin
     settings->beginGroup("User");
 
@@ -174,7 +182,7 @@ void qTame::addText(const char *msg, int count)
             settings->value("login").toString() != "" &&
             settings->value("pass").toString() != "")
     {
-        if(QString::fromUtf8(msg).contains("Spieler) ?") && !user)
+        if(QString::fromUtf8(QByteArray(msg, count)).contains("Spieler) ?") && !user)
         {
             user = true;
             if( telnet->isConnected() )
@@ -184,7 +192,7 @@ void qTame::addText(const char *msg, int count)
             }
         }
 
-        if(QString::fromUtf8(msg).contains("Password") && !password)
+        if(QString::fromUtf8(QByteArray(msg, count)).contains("Password") && !password)
         {
             password = true;
             if( telnet->isConnected() )
@@ -353,13 +361,9 @@ void qTame::btn10()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button10cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button10cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -404,6 +408,7 @@ void qTame::openFunktionen()
                 "<qTame> => Änderungen im Einstellungsmenü werden automatisch sofort gespeichert\n"
                 "<qTame> => In den Einstellungen können Befehle auf den Buttons mit ';' verkettet werden.\n"
                 "           z.B. 'sag test;sag test2'\n"
+                "<qTame> => Wenn Logging gewünscht ist, muss das bei jeder neuen Sitzung neu aktiviert werden.\n"
                 "<qTame> => !!! Autologin funktioniert nur MIT hinterlegten Logindaten!\n"
                 "<qTame> => !!! TLS funktioniert nur, wenn es der Server unterstützt!\n\n"
                 );
@@ -485,6 +490,19 @@ void qTame::autologinChanged(int val)
     else if(val == 0)
         settings->setValue("autologin", "0");
     settings->endGroup();
+}
+
+void qTame::logChanged(int val)
+{
+    if(val == 2)
+    {
+        writeLog = true;
+        log = new QFile(QDir::currentPath() + "/logs/" + QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz") + ".log");
+    }
+    else if(val == 0)
+    {
+        writeLog = false;
+    }
 }
 
 void qTame::keyPressEvent(QKeyEvent *event)
@@ -711,4 +729,33 @@ void qTame::LoadValues()
     }
 
     settings->endGroup();
+}
+
+void qTame::TelnetCommand(QString cmd)
+{
+    if(telnet->isConnected())
+    {
+        if(writeLog)
+        {
+            WriteLog(cmd+"\n");
+        }
+        telnet->sendData(cmd.toUtf8());
+        telnet->sendData("\n");
+    }
+}
+
+void qTame::WriteLog(QString txt)
+{
+    log->open(QIODevice::ReadWrite | QIODevice::Text);
+
+//    QTextStream out(log);
+//    out << txt;
+//    out.flush();
+
+//    log->flush();
+    log->write(txt.toUtf8());
+    log->flush();
+
+    if(log->isOpen())
+        log->close();
 }

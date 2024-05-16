@@ -1,4 +1,4 @@
-# qTame
+# Tamedhon qTame MUD Client
 
 !!! NOCH IN DER ENTWICKLUNG !!! DIES IST EIN DRAFT !!!
 

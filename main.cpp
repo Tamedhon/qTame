@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QRandomGenerator>
 #include <QFontDatabase>
+#include <QDir>
 
 void DefaultSettings();
 
@@ -13,6 +14,9 @@ int main(int argc, char *argv[])
 
     QFontDatabase::addApplicationFont(":/fonts/Consolas.ttf");
     QFontDatabase::addApplicationFont(":/fonts/carolingia.ttf");
+
+    if(!QDir(QDir::currentPath() + "/logs").exists())
+        QDir().mkpath(QDir::currentPath() + "/logs");
 
     DefaultSettings();
 
