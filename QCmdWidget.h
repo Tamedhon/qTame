@@ -14,10 +14,12 @@ public:
 	QStringList getHistorial() const;
 
 protected:
-	void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *e) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 signals:
 	void command(const QString &cmd);
+    void numPadKeyEvent(QKeyEvent *event);
 };
 
 #endif // QCMDWIDGET_H

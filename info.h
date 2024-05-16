@@ -3,6 +3,10 @@
 
 #include <QDialog>
 #include <QKeyEvent>
+#include <QSettings>
+#include "enum.h"
+
+using namespace Enums;
 
 namespace Ui {
 class Info;
@@ -18,6 +22,12 @@ public:
 
 private:
     Ui::Info *ui;
+    QSettings *settings;
+
+    void SetMode();
+    void SetColors(QString foreground, QString background);
+
+    void showEvent( QShowEvent* event ) override;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

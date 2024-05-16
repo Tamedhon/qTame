@@ -41,6 +41,7 @@ HEADERS  += \
     aesni/aesni-key-exp.h \
     aesni/aesni-key-init.h \
     crypto.h \
+    enum.h \
     info.h \
     qTame.h \
     qaesencryption.h \

@@ -23,6 +23,7 @@ qTame::qTame(QWidget *parent) :
     ui->txtConsole->setFont(font);
 
     LoadValues();
+    SetMode();
     LoadButtonTexts();
     Connects();
 }
@@ -70,6 +71,8 @@ void qTame::Connects()
     connect(ui->actionFunktionen, SIGNAL(triggered(bool)), this, SLOT(openFunktionen()));
     connect(ui->actionNavigation, SIGNAL(triggered(bool)), this, SLOT(openNavigation()));
     connect(ui->actionEinstellungen, SIGNAL(triggered(bool)), this, SLOT(openSettings()));
+
+    connect(ui->cbCmd, &QCmdWidget::numPadKeyEvent, this, &qTame::handleNumPadEvent);
 }
 
 void qTame::SetMode()
@@ -80,23 +83,61 @@ void qTame::SetMode()
     {
     case Themes::dark:
     {
+        SetColors("rgb(235, 235, 235)","rgb(58, 58, 58)");
         break;
     }
     case Themes::light:
     {
+        SetColors("rgb(0, 0, 0)", "rgb(235, 235, 235)");
         break;
     }
     case Themes::green:
     {
+        SetColors("rgb(127, 255, 127)","rgb(0, 0, 0)");
         break;
     }
     case Themes::bernstein:
     {
+        SetColors("rgb(238, 160, 64)","rgb(0, 0, 0)");
         break;
     }
     }
 
     settings->endGroup();
+}
+
+void qTame::SetColors(QString foreground, QString background)
+{
+    setStyleSheet(QString("background-color: %1; color: %2;").arg(background).arg(foreground));
+    QList<QMenu *> allMenu = findChildren<QMenu *>();
+    for (QMenu *menu: allMenu)
+    {
+        menu->setStyleSheet(QString("selection-background-color: %1; selection-color: %2;").arg(foreground).arg(background));
+    }
+    QList<QMenuBar *> allMenuBar = findChildren<QMenuBar *>();
+    for (QMenuBar *menubar: allMenuBar)
+    {
+        menubar->setStyleSheet(QString("QMenuBar::item:selected{background: %1; color: %2;} QMenuBar::item:pressed{background: %1; color: %2;}").arg(foreground).arg(background));
+    }
+    QList<QCheckBox *> allCheckBox = findChildren<QCheckBox *>();
+    for (QCheckBox *checkbox: allCheckBox)
+    {
+        checkbox->setStyleSheet(QString("QCheckBox::indicator{border: 1px solid; border-color: %1;} QCheckBox::indicator:checked{background-color: %1;}").arg(foreground));
+    }
+    QList<QLineEdit *> allLe = findChildren<QLineEdit *>();
+    for (QLineEdit *le: allLe)
+    {
+        le->setStyleSheet(QString("selection-background-color: %1; selection-color: %2;").arg(foreground).arg(background));
+    }
+    QList<QPushButton *> allButtons = findChildren<QPushButton *>();
+    for (QPushButton *buttons : allButtons)
+    {
+        buttons->setStyleSheet(QString("QPushButton{border: 2px solid; border-color: %1;} QPushButton:hover{background-color: %1; color: %2;}").arg(foreground).arg(background));
+    }
+    ui->txtConsole->setStyleSheet(QString("border: 1px solid; border-color: %1;").arg(foreground));
+    ui->cbCmd->setStyleSheet(QString("font-size: 24px; border: 1px solid; border-color: %1; selection-background-color: %1; selection-color: %2;").arg(foreground).arg(background));
+    ui->txtAddr->setStyleSheet(QString("border: 1px solid; border-color: %1;").arg(foreground));
+    ui->sbPort->setStyleSheet(QString("border: 1px solid; border-color: %1; selection-background-color: %1; selection-color: %2;").arg(foreground).arg(background));
 }
 
 void qTame::onStateChanged(QAbstractSocket::SocketState s)
@@ -137,7 +178,6 @@ void qTame::onStateChanged(QAbstractSocket::SocketState s)
 
 void qTame::setStatusText(const QString &msg, bool onQTelnetTester)
 {
-
     if( onQTelnetTester )
     {
         addText(msg.toUtf8(), msg.length()+1);
@@ -149,11 +189,7 @@ void qTame::setStatusText(const QString &msg, bool onQTelnetTester)
 
 void qTame::onCommand(const QString &cmd)
 {
-    if( telnet->isConnected() )
-    {
-        telnet->sendData(cmd.toUtf8());
-        telnet->sendData("\n");
-    }
+    TelnetCommand(cmd);
 }
 
 void qTame::on_btConnect_clicked()
@@ -185,17 +221,13 @@ void qTame::addText(const char *msg, int count)
         if(QString::fromUtf8(QByteArray(msg, count)).contains("Spieler) ?") && !user)
         {
             user = true;
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(settings->value("login").toString().toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand(settings->value("login").toString());
         }
 
         if(QString::fromUtf8(QByteArray(msg, count)).contains("Password") && !password)
         {
             password = true;
-            if( telnet->isConnected() )
+            if(telnet->isConnected())
             {
                 telnet->sendData(crypt->DecryptBase64(settings->value("pass").toString()).toUtf8());
                 telnet->sendData("\n");
@@ -204,7 +236,8 @@ void qTame::addText(const char *msg, int count)
     }
     settings->endGroup(); //autologin ende
 
-    ui->txtConsole->insertPlainText( QByteArray(msg, count) );
+    //ui->txtConsole->insertHtml(VT100_ANSI_2_HTML(QByteArray(msg, count)));
+    ui->txtConsole->insertPlainText(QByteArray(msg, count));
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 }
 
@@ -217,15 +250,10 @@ void qTame::btn1()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button1cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button1cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
-
     settings->endGroup();
 }
 
@@ -233,13 +261,9 @@ void qTame::btn2()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button2cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button2cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -249,13 +273,9 @@ void qTame::btn3()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button3cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button3cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -265,13 +285,9 @@ void qTame::btn4()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button4cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button4cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -281,13 +297,9 @@ void qTame::btn5()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button5cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button5cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -297,13 +309,9 @@ void qTame::btn6()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button6cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button6cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -313,13 +321,9 @@ void qTame::btn7()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button7cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button7cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -329,13 +333,9 @@ void qTame::btn8()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button8cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button8cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
 
     settings->endGroup();
@@ -345,15 +345,10 @@ void qTame::btn9()
 {
     settings->beginGroup("Buttons");
 
-    if( telnet->isConnected() )
+    foreach(QString str, settings->value("button9cmd").toString().split(";"))
     {
-        foreach(QString str, settings->value("button9cmd").toString().split(";"))
-        {
-            telnet->sendData(str.toUtf8());
-            telnet->sendData("\n");
-        }
+        TelnetCommand(str);
     }
-
     settings->endGroup();
 }
 
@@ -409,6 +404,8 @@ void qTame::openFunktionen()
                 "<qTame> => In den Einstellungen können Befehle auf den Buttons mit ';' verkettet werden.\n"
                 "           z.B. 'sag test;sag test2'\n"
                 "<qTame> => Wenn Logging gewünscht ist, muss das bei jeder neuen Sitzung neu aktiviert werden.\n"
+                "<qTame> => Die Eingabezeile wertet Zahlen nur von der Zahlenreihe aus.\n"
+                "           Der Nummernblock ist für die Navigation reserviert.\n"
                 "<qTame> => !!! Autologin funktioniert nur MIT hinterlegten Logindaten!\n"
                 "<qTame> => !!! TLS funktioniert nur, wenn es der Server unterstützt!\n\n"
                 );
@@ -432,30 +429,40 @@ void qTame::openNavigation()
                 "<qTame> => 2 = süden\n"
                 "<qTame> => 1 = südwesten\n"
                 "<qTame> => 4 = westen\n\n"
-                "<qTame> => Alt + 5 = oben\n"
                 "<qTame> => Strg + 5 = unten\n"
-                "<qTame> => Alt + 8 = nordoben\n"
+                "<qTame> => Strg + 7 = nordwestunten\n"
                 "<qTame> => Strg + 8 = nordunten\n"
-                "<qTame> => Alt + 6 = ostoben\n"
+                "<qTame> => Strg + 9 = nordostunten\n"
                 "<qTame> => Strg + 6 = ostunten\n"
-                "<qTame> => Alt + 2 = südoben\n"
+                "<qTame> => Strg + 3 = südostunten\n"
                 "<qTame> => Strg + 2 = südunten\n"
-                "<qTame> => Alt + 4 = westoben\n"
+                "<qTame> => Strg + 1 = südwestunten\n"
                 "<qTame> => Strg + 4 = westunten\n\n"
+                "<qTame> => Alt + 5 = oben\n"
+                "<qTame> => Alt + 7 = nordwestoben\n"
+                "<qTame> => Alt + 8 = nordoben\n"
+                "<qTame> => Alt + 9 = nordostoben\n"
+                "<qTame> => Alt + 6 = ostoben\n"
+                "<qTame> => Alt + 3 = südostoben\n"
+                "<qTame> => Alt + 2 = südoben\n"
+                "<qTame> => Alt + 1 = südwestoben\n"
+                "<qTame> => Alt + 4 = westoben\n\n"
                 );
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 
     moveCursorToEnd();
 }
 
-void qTame::onCursorUp()
+void qTame::CursorUp()
 {
-
+    ui->cbCmd->setFocus();
+    ui->cbCmd->setCurrentIndex(ui->cbCmd->count()-1);
 }
 
-void qTame::onCursorDown()
+void qTame::CursorDown()
 {
-
+    ui->cbCmd->setFocus();
+    ui->cbCmd->setCurrentIndex(0);
 }
 
 void qTame::addressChanged(QString txt)
@@ -514,165 +521,156 @@ void qTame::keyPressEvent(QKeyEvent *event)
         close();
     }
 
-    if(event->modifiers() & Qt::KeypadModifier)
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_Up)
+    {
+        CursorUp();
+    }
+
+    if(event->type() == QKeyEvent::KeyPress &&
+            event->key() == Qt::Key_Down)
+    {
+        CursorDown();
+    }
+
+    if(event->modifiers() & Qt::KeypadModifier && !(event->modifiers() & Qt::ControlModifier) && !(event->modifiers() & Qt::AltModifier))
     {
         if(event->key() == Qt::Key_1)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("suedwesten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedwesten");
             return;
         }
         else if(event->key() == Qt::Key_2)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("sueden").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("sueden");
             return;
         }
         else if(event->key() == Qt::Key_3)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("suedosten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedosten");
             return;
         }
         else if(event->key() == Qt::Key_4)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("westen").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("westen");
             return;
         }
         else if(event->key() == Qt::Key_6)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("osten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("osten");
             return;
         }
         else if(event->key() == Qt::Key_7)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("nordwesten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("nordwesten");
             return;
         }
         else if(event->key() == Qt::Key_8)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("norden").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("norden");
             return;
         }
         else if(event->key() == Qt::Key_9)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("nordosten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("nordosten");
             return;
         }
     }
-
-    if((event->modifiers() & Qt::KeypadModifier) && (event->modifiers() & Qt::ControlModifier))
+    else if((event->modifiers() & Qt::KeypadModifier) && (event->modifiers() & Qt::ControlModifier))
     {
-        if(event->key() == Qt::Key_2)
+        if(event->key() == Qt::Key_1)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("suedunten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedwestunten");
             return;
         }
-
-        if(event->key() == Qt::Key_4)
+        else if(event->key() == Qt::Key_2)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("westunten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedunten");
             return;
         }
-        if(event->key() == Qt::Key_5)
+        else if(event->key() == Qt::Key_3)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("unten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedostunten");
             return;
         }
-        if(event->key() == Qt::Key_8)
+        else if(event->key() == Qt::Key_4)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("nordunten").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("westunten");
+            return;
+        }
+        else if(event->key() == Qt::Key_5)
+        {
+            TelnetCommand("unten");
+            return;
+        }
+        else if(event->key() == Qt::Key_6)
+        {
+            TelnetCommand("ostunten");
+            return;
+        }
+        else if(event->key() == Qt::Key_7)
+        {
+            TelnetCommand("nordwestunten");
+            return;
+        }
+        else if(event->key() == Qt::Key_8)
+        {
+            TelnetCommand("nordunten");
+            return;
+        }
+        else if(event->key() == Qt::Key_9)
+        {
+            TelnetCommand("nordostunten");
             return;
         }
     }
-
-    if((event->modifiers() & Qt::KeypadModifier) && (event->modifiers() & Qt::AltModifier))
+    else if((event->modifiers() & Qt::KeypadModifier) && (event->modifiers() & Qt::AltModifier))
     {
-        if(event->key() == Qt::Key_2)
+        if(event->key() == Qt::Key_1)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("suedoben").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedwestoben");
             return;
         }
-
-        if(event->key() == Qt::Key_4)
+        else if(event->key() == Qt::Key_2)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("westoben").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedoben");
             return;
         }
-
-        if(event->key() == Qt::Key_5)
+        else if(event->key() == Qt::Key_3)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("oben").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("suedostoben");
             return;
         }
-
-        if(event->key() == Qt::Key_8)
+        else if(event->key() == Qt::Key_4)
         {
-            if( telnet->isConnected() )
-            {
-                telnet->sendData(QString("nordoben").toUtf8());
-                telnet->sendData("\n");
-            }
+            TelnetCommand("westoben");
             return;
         }
-
+        else if(event->key() == Qt::Key_5)
+        {
+            TelnetCommand("oben");
+            return;
+        }
+        else if(event->key() == Qt::Key_6)
+        {
+            TelnetCommand("ostoben");
+            return;
+        }
+        else if(event->key() == Qt::Key_7)
+        {
+            TelnetCommand("nordwestoben");
+            return;
+        }
+        else if(event->key() == Qt::Key_8)
+        {
+            TelnetCommand("nordoben");
+            return;
+        }
+        else if(event->key() == Qt::Key_9)
+        {
+            TelnetCommand("nordostoben");
+            return;
+        }
     }
     QWidget::keyPressEvent(event);
 }
@@ -706,7 +704,6 @@ void qTame::LoadValues()
 {
     settings->beginGroup("User");
 
-    SetMode();
     ui->txtAddr->setText(settings->value("address").toString());
     ui->sbPort->setValue(settings->value("port").toInt());
 
@@ -746,16 +743,25 @@ void qTame::TelnetCommand(QString cmd)
 
 void qTame::WriteLog(QString txt)
 {
-    log->open(QIODevice::ReadWrite | QIODevice::Text);
+    log->open(QIODevice::WriteOnly | QIODevice::Append);
 
-//    QTextStream out(log);
-//    out << txt;
-//    out.flush();
-
-//    log->flush();
-    log->write(txt.toUtf8());
-    log->flush();
+    QTextStream out(log);
+    out << txt;
 
     if(log->isOpen())
         log->close();
+}
+
+void qTame::handleNumPadEvent(QKeyEvent *event)
+{
+    keyPressEvent(event);
+}
+
+QString qTame::VT100_ANSI_2_HTML(QString input)
+{
+    QString output;
+
+    output = "<pre>"+input.replace("\n","<br>").replace(" ","&nbsp;").replace("<qTame>","&lt;qTame&gt;")+"</pre>";
+
+    return output;
 }

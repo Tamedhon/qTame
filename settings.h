@@ -5,6 +5,9 @@
 #include <QKeyEvent>
 #include <QSettings>
 #include "crypto.h"
+#include "enum.h"
+
+using namespace Enums;
 
 namespace Ui {
 class Settings;
@@ -25,6 +28,11 @@ private:
 
     void Connects();
     void LoadSettings();
+
+    void SetMode();
+    void SetColors(QString foreground, QString background);
+
+    void showEvent( QShowEvent* event ) override;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

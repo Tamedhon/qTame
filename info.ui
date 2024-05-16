@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>543</width>
+    <width>626</width>
     <height>736</height>
    </rect>
   </property>
@@ -35,32 +35,62 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="lblLogo">
-     <property name="minimumSize">
-      <size>
-       <width>500</width>
-       <height>500</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>500</width>
-       <height>500</height>
-      </size>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="resources.qrc">:/logo.png</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>true</bool>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignJustify|Qt::AlignVCenter</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblLogo">
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>500</width>
+         <height>500</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="resources.qrc">:/logo.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lblC">

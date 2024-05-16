@@ -24,6 +24,12 @@
     </item>
     <item row="1" column="0">
      <widget class="QCmdWidget" name="cbCmd">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>46</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <pointsize>11</pointsize>
@@ -357,6 +363,9 @@
      <font>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="title">
      <string>Datei</string>

@@ -17,6 +17,9 @@
 #include "crypto.h"
 #include "info.h"
 #include "settings.h"
+#include "enum.h"
+
+using namespace Enums;
 
 
 namespace Ui
@@ -34,15 +37,6 @@ class qTame : public QMainWindow
     Settings *set;
 
 public:
-    enum class Themes
-    {
-        dark = 0,
-        light = 1,
-        green = 2,
-        bernstein = 3
-    };
-    Q_ENUM(Themes);
-
     explicit qTame(QWidget *parent = 0);
     ~qTame();   
 
@@ -57,11 +51,16 @@ private:
 
     void Connects();
     void SetMode();
+    void SetColors(QString foreground, QString background);
     void moveCursorToEnd();
     void LoadButtonTexts();
     void LoadValues();
     void TelnetCommand(QString cmd);
     void WriteLog(QString txt);
+    QString VT100_ANSI_2_HTML(QString input);
+
+    void CursorUp();
+    void CursorDown();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -89,9 +88,6 @@ private slots:
     void openNavigation();
     void openSettings();
 
-    void onCursorUp();
-    void onCursorDown();
-
     void addressChanged(QString txt);
     void portChanged(int val);
     void tlsChanged(int val);
@@ -101,6 +97,7 @@ private slots:
 public slots:
     void setStatusText(const QString &msg, bool onMainWindow = false);
     void addText(const char *msg, int count);
+    void handleNumPadEvent(QKeyEvent *event);
 
 };
 

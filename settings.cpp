@@ -17,6 +17,7 @@ Settings::Settings(QWidget *parent) :
     ui->cmbTheme->addItems({"Darkmode", "Lightmode", "grün monochrom", "bernstein"});
 
     LoadSettings();
+    SetMode();
     Connects();
 
     QFont font = QFont("Carolingia", 15, 1);
@@ -43,6 +44,11 @@ Settings::~Settings()
     delete crypt;
     delete settings;
     delete ui;
+}
+
+void Settings::showEvent( QShowEvent* event )
+{
+    SetMode();
 }
 
 void Settings::Connects()
@@ -289,4 +295,50 @@ void Settings::ThemeChanged(int idx)
     settings->beginGroup("User");
     settings->setValue("mode", idx);
     settings->endGroup();
+
+    SetMode();
+}
+
+void Settings::SetMode()
+{
+    settings->beginGroup("User");
+
+    switch(static_cast<Themes>(settings->value("mode").toInt()))
+    {
+    case Themes::dark:
+    {
+        SetColors("rgb(235, 235, 235)","rgb(58, 58, 58)");
+        break;
+    }
+    case Themes::light:
+    {
+        SetColors("rgb(0, 0, 0)", "rgb(235, 235, 235)");
+        break;
+    }
+    case Themes::green:
+    {
+        SetColors("rgb(127, 255, 127)","rgb(0, 0, 0)");
+        break;
+    }
+    case Themes::bernstein:
+    {
+        SetColors("rgb(238, 160, 64)","rgb(0, 0, 0)");
+        break;
+    }
+    }
+
+    settings->endGroup();
+}
+
+void Settings::SetColors(QString foreground, QString background)
+{
+    setStyleSheet(QString("background-color: %1; color: %2;").arg(background).arg(foreground));
+    QList<QLineEdit *> allLe = findChildren<QLineEdit *>();
+    for (QLineEdit *le: allLe)
+    {
+        le->setStyleSheet(QString("border: 2px solid; border-color: %1; selection-background-color: %1; selection-color: %2;").arg(foreground).arg(background));
+    }
+
+    ui->btnClose->setStyleSheet(QString("QPushButton{border: 2px solid; border-color: %1;} QPushButton:hover{background-color: %1; color: %2;}").arg(foreground).arg(background));
+    ui->cmbTheme->setStyleSheet(QString("border: 2px solid; border-color: %1;").arg(foreground));
 }

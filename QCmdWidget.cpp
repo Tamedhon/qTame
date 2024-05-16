@@ -3,7 +3,7 @@
 
 QCmdWidget::QCmdWidget(QWidget *papi) : QComboBox(papi)
 {
-
+    installEventFilter(this);
 }
 
 /**
@@ -13,7 +13,7 @@ QCmdWidget::QCmdWidget(QWidget *papi) : QComboBox(papi)
  */
 void QCmdWidget::setHistorial(const QStringList &cmds)
 {
-	addItems(cmds);
+    addItems(cmds);
 }
 
 /**
@@ -23,10 +23,10 @@ void QCmdWidget::setHistorial(const QStringList &cmds)
  */
 QStringList QCmdWidget::getHistorial() const
 {
-	QStringList rtn;
-	for( int i = 0; i < count(); i++ )
-		rtn += itemText(1);
-	return rtn;
+    QStringList rtn;
+    for( int i = 0; i < count(); i++ )
+        rtn += itemText(1);
+    return rtn;
 }
 
 /**
@@ -37,13 +37,42 @@ QStringList QCmdWidget::getHistorial() const
  */
 void QCmdWidget::keyPressEvent(QKeyEvent *e)
 {
-	if( ((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && !currentText().isEmpty() )
-	{
-		addItem(currentText());
-        lineEdit()->selectAll();
+    if( ((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)))
+    {
+        if(!currentText().isEmpty())
+        {
+            addItem(currentText());
+            lineEdit()->selectAll();
+        }
         //clearEditText();
-		emit command(currentText());     
-	}
-	else
-		QComboBox::keyPressEvent(e);
+        emit command(currentText());
+        clearEditText();
+    }
+    else
+        QComboBox::keyPressEvent(e);
 }
+
+bool QCmdWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if ((keyEvent->modifiers() & Qt::KeypadModifier) && (keyEvent->modifiers() & Qt::AltModifier))
+        {
+            emit numPadKeyEvent(keyEvent);
+            return true;
+        }
+        else if ((keyEvent->modifiers() & Qt::KeypadModifier) && (keyEvent->modifiers() & Qt::ControlModifier))
+        {
+            emit numPadKeyEvent(keyEvent);
+            return true;
+        }
+        else if ((keyEvent->modifiers() & Qt::KeypadModifier) && !(keyEvent->modifiers() & Qt::ControlModifier) && !(keyEvent->modifiers() & Qt::AltModifier))
+        {
+            emit numPadKeyEvent(keyEvent);
+            return true;
+        }
+    }
+    return QObject::eventFilter(obj, event);
+}
+
