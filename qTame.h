@@ -13,6 +13,8 @@
 #include <QTextBrowser>
 #include <QDateTime>
 #include <QDir>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include "QTelnet.h"
 #include "crypto.h"
 #include "info.h"
@@ -31,16 +33,16 @@ class qTame : public QMainWindow
 {
     Q_OBJECT
 
+public:
+    explicit qTame(QWidget *parent = 0);
+    ~qTame();
+
+private:
     Ui::qTame *ui;
     QTelnet *telnet;
     Info *info;
     Settings *set;
 
-public:
-    explicit qTame(QWidget *parent = 0);
-    ~qTame();   
-
-private:
     bool user = false;
     bool password = false;
     bool writeLog = false;
@@ -57,7 +59,8 @@ private:
     void LoadValues();
     void TelnetCommand(QString cmd);
     void WriteLog(QString txt);
-    QString VT100_ANSI_2_HTML(QString input);
+    void GetNews();
+    void VT100_ANSI_Decode(QString input);
 
     void CursorUp();
     void CursorDown();

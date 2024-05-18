@@ -3,12 +3,25 @@
 #include <QRandomGenerator>
 #include <QFontDatabase>
 #include <QDir>
+#include <QCommandLineParser>
 
 void DefaultSettings();
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+    QApplication a(argc, argv);
+
+    QCommandLineParser parser;
+
+    parser.setApplicationDescription("qTame Hilfe");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    QCommandLineOption debugOption(QStringList() << "d" << "debug", "Debugmodus! Loggt ALLES inkl. Steuerzeichen!");
+    parser.addOption(debugOption);
+    parser.process(a);
+
+    const QStringList args = parser.positionalArguments();
+    bool debug = parser.isSet(debugOption);
 
     QRandomGenerator::securelySeeded();
 
@@ -21,9 +34,9 @@ int main(int argc, char *argv[])
     DefaultSettings();
 
     qTame w;
-	w.show();
+    w.show();
 
-	return a.exec();
+    return a.exec();
 }
 
 void DefaultSettings()
