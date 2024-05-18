@@ -409,8 +409,8 @@ void qTame::openFunktionen()
                 "           Der Nummernblock ist für die Navigation reserviert.\n"
                 "<qTame> => !!! Autologin funktioniert nur MIT hinterlegten Logindaten!\n"
                 "<qTame> => !!! TLS funktioniert nur, wenn es der Server unterstützt!\n"
-                "<qTame> => Kommandozeilenparameter '-d' oder '--debug' führt qTame im Debugmodus aus.\n"
-                "           Im Debugmodus wird ALLES inkl. Steuerzeichen geloggt."
+                "<qTame> => Die config-Datei qTame.td liegt unter /bin.\n"
+                "           Z.B. für Backups wichtig."
                 );
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 
