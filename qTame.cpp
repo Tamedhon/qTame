@@ -807,10 +807,12 @@ void qTame::TelnetCommand(QString cmd)
 
 void qTame::WriteLog(QString txt)
 {
+    QRegularExpression regexp("\x1b\\[[0-9;]*[A-Za-z]");
+
     log->open(QIODevice::WriteOnly | QIODevice::Append);
 
     QTextStream out(log);
-    out << txt;
+    out << txt.remove(regexp);
 
     if(log->isOpen())
         log->close();
