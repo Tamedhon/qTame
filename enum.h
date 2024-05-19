@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENUM_H
+#define ENUM_H
 
 #include <QObject>
 
@@ -15,3 +16,5 @@ namespace Enums
     };
     Q_ENUM_NS(Themes)
 };
+
+#endif

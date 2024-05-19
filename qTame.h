@@ -60,7 +60,6 @@ private:
     void TelnetCommand(QString cmd);
     void WriteLog(QString txt);
     void GetNews();
-    void VT100_ANSI_Decode(QString input);
 
     void CursorUp();
     void CursorDown();

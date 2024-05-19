@@ -238,7 +238,7 @@ void qTame::addText(const char *msg, int count)
     }
     settings->endGroup(); //autologin ende
 
-    VT100_ANSI_Decode(QByteArray(msg, count));
+    ui->txtConsole->insertAnsiText(QByteArray(msg, count));
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 }
 
@@ -844,59 +844,4 @@ void qTame::GetNews()
     config.setProtocol(QSsl::TlsV1SslV3);
     request.setSslConfiguration(config);
     manager->get(request);
-}
-
-void qTame::VT100_ANSI_Decode(QString input)
-{
-    ui->txtConsole->insertPlainText(input);
-
-    //reset normal
-    QString end = "\033[0m";
-
-    //vt100
-    QStringList vt100;
-    vt100.append("\033[1m"); //helle farbe
-    vt100.append("\033[4m"); //unterstrichen
-    vt100.append("\033[5m"); //blinkend
-    vt100.append("\033[7m"); //invers
-
-    //helel farbe ist "\033[1m + farbe"
-
-    //ansi farben vordergrund
-    QMap<QString, QColor> colorMapFG;
-    colorMapFG["\033[30m"] = QColor(0,0,0); //schwarz
-    colorMapFG["\033[31m"] = QColor(187,0,0); //rot
-    colorMapFG["\033[32m"] = QColor(0,187,0); //grün
-    colorMapFG["\033[33m"] = QColor(187,187,0); //gelb
-    colorMapFG["\033[34m"] = QColor(0,0,187); //blau
-    colorMapFG["\033[35m"] = QColor(187,0,187); //magenta
-    colorMapFG["\033[36m"] = QColor(0,187,187); //cyan
-    colorMapFG["\033[37m"] = QColor(187,187,187); //weiß (eher hellgrau)
-    colorMapFG[vt100[0]+"\033[30m"] = QColor(85,85,85); //grau (eher dunkelgrau)
-    colorMapFG[vt100[0]+"\033[31m"] = QColor(255,85,85); //hellrot
-    colorMapFG[vt100[0]+"\033[32m"] = QColor(85,255,85); //hellgrün
-    colorMapFG[vt100[0]+"\033[33m"] = QColor(255,255,85); //hellgelb
-    colorMapFG[vt100[0]+"\033[34m"] = QColor(85,85,255); //hellblau
-    colorMapFG[vt100[0]+"\033[35m"] = QColor(255,85,255); //hellmagenta
-    colorMapFG[vt100[0]+"\033[36m"] = QColor(85,255,255); //hellcyan
-    colorMapFG[vt100[0]+"\033[37m"] = QColor(255,255,255); //hellweiß (richtiges weiß)
-
-    //ansi farben hintergrund
-    QMap<QString, QColor> colorMapBG;
-    colorMapBG["\033[40m"] = QColor(0,0,0); //schwarz
-    colorMapBG["\033[41m"] = QColor(187,0,0); //rot
-    colorMapBG["\033[42m"] = QColor(0,187,0); //grün
-    colorMapBG["\033[43m"] = QColor(187,187,0); //gelb
-    colorMapBG["\033[44m"] = QColor(0,0,187); //blau
-    colorMapBG["\033[45m"] = QColor(187,0,187); //magenta
-    colorMapBG["\033[46m"] = QColor(0,187,187); //cyan
-    colorMapBG["\033[47m"] = QColor(187,187,187); //weiß (eher hellgrau)
-    colorMapBG[vt100[0]+"\033[40m"] = QColor(85,85,85); //grau (eher dunkelgrau)
-    colorMapBG[vt100[0]+"\033[41m"] = QColor(255,85,85); //hellrot
-    colorMapBG[vt100[0]+"\033[42m"] = QColor(85,255,85); //hellgrün
-    colorMapBG[vt100[0]+"\033[43m"] = QColor(255,255,85); //hellgelb
-    colorMapBG[vt100[0]+"\033[44m"] = QColor(85,85,255); //hellblau
-    colorMapBG[vt100[0]+"\033[45m"] = QColor(255,85,255); //hellmagenta
-    colorMapBG[vt100[0]+"\033[46m"] = QColor(85,255,255); //hellcyan
-    colorMapBG[vt100[0]+"\033[47m"] = QColor(255,255,255); //hellweiß (richtiges weiß)
 }

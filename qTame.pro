@@ -31,6 +31,7 @@ SOURCES += main.cpp\
     info.cpp \
     qTame.cpp \
     qaesencryption.cpp \
+    qtextconsole.cpp \
     settings.cpp
 
 HEADERS  += \
