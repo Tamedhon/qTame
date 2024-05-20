@@ -90,6 +90,7 @@ private slots:
     void openNavigation();
     void openSettings();
 
+    void addressEnter();
     void addressChanged(QString txt);
     void portChanged(int val);
     void tlsChanged(int val);

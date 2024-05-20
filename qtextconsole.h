@@ -27,6 +27,11 @@ protected:
         event->ignore();
     }
 
+    void contextMenuEvent(QContextMenuEvent *event) override
+    {
+        event->ignore();
+    }
+
 private:
     void applyAnsiCodes(QTextCursor &cursor, const QStringList &codes);
     bool bright = false;

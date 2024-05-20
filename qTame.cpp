@@ -27,6 +27,8 @@ qTame::qTame(QWidget *parent) :
     Connects();
 
     GetNews();
+
+    ui->cbCmd->setFocus();
 }
 
 qTame::~qTame()
@@ -62,7 +64,7 @@ void qTame::Connects()
     connect(ui->btn10, SIGNAL(clicked()), this, SLOT(btn10()));
 
     connect(ui->txtAddr, SIGNAL(textChanged(QString)), this, SLOT(addressChanged(QString)));
-    connect(ui->txtAddr, SIGNAL(returnPressed()), this, SLOT(on_btConnect_clicked()));
+    connect(ui->txtAddr, SIGNAL(returnPressed()), this, SLOT(addressEnter()));
     connect(ui->sbPort, SIGNAL(valueChanged(int)), this, SLOT(portChanged(int)));
     connect(ui->cbTLS, SIGNAL(stateChanged(int)), this, SLOT(tlsChanged(int)));
     connect(ui->cbAutologin, SIGNAL(stateChanged(int)), this, SLOT(autologinChanged(int)));
@@ -204,6 +206,8 @@ void qTame::on_btConnect_clicked()
     }
     else
         telnet->connectToHost(ui->txtAddr->text(), ui->sbPort->value());
+
+    ui->cbCmd->setFocus();
 }
 
 void qTame::addText(const char *msg, int count)
@@ -212,6 +216,9 @@ void qTame::addText(const char *msg, int count)
     {
         WriteLog(QByteArray(msg, count));
     }
+
+    ui->txtConsole->insertAnsiText(QByteArray(msg, count));
+    ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 
     //autologin
     settings->beginGroup("User");
@@ -237,9 +244,6 @@ void qTame::addText(const char *msg, int count)
         }
     }
     settings->endGroup(); //autologin ende
-
-    ui->txtConsole->insertAnsiText(QByteArray(msg, count));
-    ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 }
 
 void qTame::btnClose()
@@ -256,6 +260,7 @@ void qTame::btn1()
         TelnetCommand(str);
     }
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn2()
@@ -268,6 +273,7 @@ void qTame::btn2()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn3()
@@ -280,6 +286,7 @@ void qTame::btn3()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn4()
@@ -292,6 +299,7 @@ void qTame::btn4()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn5()
@@ -304,6 +312,7 @@ void qTame::btn5()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn6()
@@ -316,6 +325,7 @@ void qTame::btn6()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn7()
@@ -328,6 +338,7 @@ void qTame::btn7()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn8()
@@ -340,6 +351,7 @@ void qTame::btn8()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn9()
@@ -351,6 +363,7 @@ void qTame::btn9()
         TelnetCommand(str);
     }
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::btn10()
@@ -363,6 +376,7 @@ void qTame::btn10()
     }
 
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::openInfo()
@@ -383,6 +397,7 @@ void qTame::openInfo()
     ui->txtConsole->insertPlainText(QString("\n<qTame> Tamedhon qTame Version %1 %2\n\n").arg(APP_VERSION).arg(release));
     moveCursorToEnd();
     info->exec();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::openSettings()
@@ -390,6 +405,7 @@ void qTame::openSettings()
     set->exec();
     LoadButtonTexts();
     SetMode();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::openFunktionen()
@@ -415,6 +431,7 @@ void qTame::openFunktionen()
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 
     moveCursorToEnd();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::openNavigation()
@@ -454,6 +471,7 @@ void qTame::openNavigation()
     ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
 
     moveCursorToEnd();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::CursorUp()
@@ -490,6 +508,7 @@ void qTame::tlsChanged(int val)
     else if(val == 0)
         settings->setValue("tls", "0");
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::autologinChanged(int val)
@@ -500,6 +519,7 @@ void qTame::autologinChanged(int val)
     else if(val == 0)
         settings->setValue("autologin", "0");
     settings->endGroup();
+    ui->cbCmd->setFocus();
 }
 
 void qTame::logChanged(int val)
@@ -513,17 +533,11 @@ void qTame::logChanged(int val)
     {
         writeLog = false;
     }
+    ui->cbCmd->setFocus();
 }
 
 void qTame::keyPressEvent(QKeyEvent *event)
 {
-    if(event->type() == QKeyEvent::KeyPress &&
-            event->key() == Qt::Key_Escape)
-    {
-        // close window when Escape is pressed
-        close();
-    }
-
     if(event->type() == QKeyEvent::KeyPress &&
             event->key() == Qt::Key_Up)
     {
@@ -812,7 +826,9 @@ void qTame::WriteLog(QString txt)
     log->open(QIODevice::WriteOnly | QIODevice::Append);
 
     QTextStream out(log);
+#ifndef QT_DEBUG
     out << txt.remove(regexp);
+#endif
 
     if(log->isOpen())
         log->close();
@@ -846,4 +862,11 @@ void qTame::GetNews()
     config.setProtocol(QSsl::TlsV1SslV3);
     request.setSslConfiguration(config);
     manager->get(request);
+}
+
+void qTame::addressEnter()
+{
+    if(!telnet->isConnected())
+        telnet->connectToHost(ui->txtAddr->text(), ui->sbPort->value());
+    ui->cbCmd->setFocus();
 }

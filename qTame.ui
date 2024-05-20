@@ -21,6 +21,9 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <widget class="QTextConsole" name="txtConsole">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="cursorWidth">
        <number>0</number>
       </property>
@@ -421,9 +424,6 @@
   <action name="actionBeenden">
    <property name="text">
     <string>Beenden</string>
-   </property>
-   <property name="shortcut">
-    <string>Esc</string>
    </property>
   </action>
   <action name="actionZuweisung_freie_Buttons">
