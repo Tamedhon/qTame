@@ -20,6 +20,7 @@
 #include "info.h"
 #include "settings.h"
 #include "enum.h"
+#include "datacollector.h"
 
 using namespace Enums;
 
@@ -42,6 +43,8 @@ private:
     QTelnet *telnet;
     Info *info;
     Settings *set;
+    DataCollector *col;
+
 
     bool user = false;
     bool password = false;
@@ -63,6 +66,8 @@ private:
 
     void CursorUp();
     void CursorDown();
+
+    void SetScreenreaderAccessables();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

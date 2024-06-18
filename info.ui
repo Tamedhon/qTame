@@ -128,13 +128,13 @@
        <property name="minimumSize">
         <size>
          <width>225</width>
-         <height>62</height>
+         <height>45</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>225</width>
-         <height>62</height>
+         <height>45</height>
         </size>
        </property>
        <property name="font">

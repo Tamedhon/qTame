@@ -92,6 +92,8 @@ void DefaultSettings()
         settings->setValue("button10text", "freier Button 5");
     if(settings->value("button10cmd").toString() == "")
         settings->setValue("button10cmd", "");
+    if(settings->value("buttons_vis").toString() == "")
+        settings->setValue("buttons_vis", "1");
     settings->endGroup();
 
     delete settings;

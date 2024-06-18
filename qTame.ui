@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1459</width>
-    <height>1159</height>
+    <width>1332</width>
+    <height>1016</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -72,7 +78,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -90,7 +102,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -108,7 +126,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -126,7 +150,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -144,7 +174,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -177,7 +213,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -195,7 +237,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -213,7 +261,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -231,7 +285,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -249,7 +309,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -267,7 +333,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>62</height>
+          <height>45</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>45</height>
          </size>
         </property>
         <property name="font">
@@ -302,6 +374,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QCheckBox" name="cbTLS">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="font">
            <font>
             <pointsize>11</pointsize>
@@ -312,6 +387,9 @@
           </property>
           <property name="text">
            <string>TLS</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -356,7 +434,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1459</width>
+     <width>1332</width>
      <height>35</height>
     </rect>
    </property>
@@ -478,6 +556,9 @@
   <tabstop>cbCmd</tabstop>
   <tabstop>txtAddr</tabstop>
   <tabstop>sbPort</tabstop>
+  <tabstop>cbTLS</tabstop>
+  <tabstop>cbAutologin</tabstop>
+  <tabstop>cbLog</tabstop>
   <tabstop>btConnect</tabstop>
   <tabstop>btnClose</tabstop>
   <tabstop>btn1</tabstop>

@@ -11,8 +11,10 @@ CONFIG += c++17
 TARGET = qTame
 TEMPLATE = app
 
-VERSION = 1.0.0
+VERSION = 1.1
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+
 
 win32
 {
@@ -23,11 +25,11 @@ win32
     QMAKE_TARGET_COPYRIGHT = (c) 2024 - Aloy
 }
 
-
 SOURCES += main.cpp\
     QTelnet.cpp \
     QCmdWidget.cpp \
     crypto.cpp \
+    datacollector.cpp \
     info.cpp \
     qTame.cpp \
     qaesencryption.cpp \
@@ -42,6 +44,7 @@ HEADERS  += \
     aesni/aesni-key-exp.h \
     aesni/aesni-key-init.h \
     crypto.h \
+    datacollector.h \
     enum.h \
     info.h \
     qTame.h \

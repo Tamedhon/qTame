@@ -43,6 +43,8 @@ private slots:
     void UserChanged(QString txt);
     void PasswordChanged(QString txt);
 
+    void visChanged(int val);
+
     void Button1TextChanged(QString txt);
     void Button1CMDChanged(QString txt);
     void Button2TextChanged(QString txt);

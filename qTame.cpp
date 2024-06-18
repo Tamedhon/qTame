@@ -15,6 +15,8 @@ qTame::qTame(QWidget *parent) :
     info = new Info();
     set = new Settings();
     crypt = new Crypto::Crypto();
+    col = new DataCollector();
+    col->start();
     settings = new QSettings(QCoreApplication::applicationDirPath()+"/qTame.td", QSettings::IniFormat);
     settings->setIniCodec("UTF-8");
 
@@ -24,6 +26,7 @@ qTame::qTame(QWidget *parent) :
     LoadValues();
     SetMode();
     LoadButtonTexts();
+    SetScreenreaderAccessables();
     Connects();
 
     GetNews();
@@ -41,6 +44,9 @@ qTame::~qTame()
     delete set;
     if(log != nullptr)
         delete log;
+    col->Cancel();
+    while(col->isRunning()){}
+    delete col;
     delete ui;
 }
 
@@ -405,6 +411,7 @@ void qTame::openSettings()
     set->exec();
     LoadButtonTexts();
     SetMode();
+    ui->txtConsole->verticalScrollBar()->setValue(0xFFFFFFF);
     ui->cbCmd->setFocus();
 }
 
@@ -774,7 +781,43 @@ void qTame::LoadButtonTexts()
     ui->btn9->setText("F9: " + settings->value("button9text").toString());
     ui->btn10->setText("F10: " + settings->value("button10text").toString());
 
+    if(settings->value("buttons_vis").toInt() == 1)
+    {
+        ui->btn1->setVisible(true);
+        ui->btn2->setVisible(true);
+        ui->btn3->setVisible(true);
+        ui->btn4->setVisible(true);
+        ui->btn5->setVisible(true);
+        ui->btn6->setVisible(true);
+        ui->btn7->setVisible(true);
+        ui->btn8->setVisible(true);
+        ui->btn9->setVisible(true);
+        ui->btn10->setVisible(true);
+    }
+    else if(settings->value("buttons_vis").toInt() == 0)
+    {
+        ui->btn1->setVisible(false);
+        ui->btn2->setVisible(false);
+        ui->btn3->setVisible(false);
+        ui->btn4->setVisible(false);
+        ui->btn5->setVisible(false);
+        ui->btn6->setVisible(false);
+        ui->btn7->setVisible(false);
+        ui->btn8->setVisible(false);
+        ui->btn9->setVisible(false);
+        ui->btn10->setVisible(false);
+    }
+
     settings->endGroup();
+}
+
+void qTame::SetScreenreaderAccessables()
+{
+//#include <QtAccessibilitySupport/QtAccessibilitySupport>
+//    qDebug() << QAccessibility::isActive;
+
+    ui->btn1->setAccessibleName("");
+    ui->btn1->setAccessibleDescription("");
 }
 
 void qTame::LoadValues()
@@ -828,6 +871,8 @@ void qTame::WriteLog(QString txt)
     QTextStream out(log);
 #ifndef QT_DEBUG
     out << txt.remove(regexp);
+#else
+    out << txt;
 #endif
 
     if(log->isOpen())
@@ -851,12 +896,12 @@ void qTame::GetNews()
             return;
         }
 
-        ui->txtConsole->insertPlainText(reply->readAll());
+        ui->txtConsole->insertHtml(reply->readAll().replace("<hr>","__________________________________________________________________"));
     }
     );
 
     QNetworkRequest request;
-    request.setUrl(QUrl("https://www.tamedhon.de/qtame/news"));
+    request.setUrl(QUrl("https://www.tamedhon.de/content/news.php"));
     QSslConfiguration config(QSslConfiguration::defaultConfiguration());
     config.setPeerVerifyMode(QSslSocket::VerifyPeer);
     config.setProtocol(QSsl::TlsV1SslV3);

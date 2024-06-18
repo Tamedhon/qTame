@@ -5,10 +5,13 @@
 #include <QRegularExpression>
 #include <QTextBrowser>
 
+
 class QTextConsole : public QTextBrowser
 {
+
 public:
     QTextConsole(QWidget *parent = nullptr) : QTextBrowser(parent) {}
+    ~QTextConsole(){}
     void insertAnsiText(const QString &text);
 
 protected:

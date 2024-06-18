@@ -1,5 +1,6 @@
 #include "qtextconsole.h"
 
+
 void QTextConsole::insertAnsiText(const QString &text)
 {
     QTextCursor cursor = textCursor();
@@ -34,12 +35,15 @@ void QTextConsole::applyAnsiCodes(QTextCursor &cursor, const QStringList &codes)
         switch (n)
         {
         case 0:
-            //            format = QTextCharFormat(); // Reset
+            format = QTextCharFormat(); // Reset
             format.clearBackground();
             format.clearForeground();
             format.setFontWeight(QFont::Normal);
             format.setFontUnderline(false);
             bright = false;
+
+
+            cursor.mergeBlockCharFormat(format);
             break;
         case 1:
             //            format.setFontWeight(QFont::Bold);

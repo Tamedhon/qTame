@@ -37,6 +37,7 @@ Settings::Settings(QWidget *parent) :
     ui->lblBtnText->setFont(font);
     ui->lblCMD->setFont(font);
     ui->lblTheme->setFont(font);
+    ui->cbVis->setFont(font);
 }
 
 Settings::~Settings()
@@ -80,6 +81,8 @@ void Settings::Connects()
     connect(ui->leCMD9, SIGNAL(textChanged(QString)), this, SLOT(Button9CMDChanged(QString)));
     connect(ui->leButtonText10, SIGNAL(textChanged(QString)), this, SLOT(Button10TextChanged(QString)));
     connect(ui->leCMD10, SIGNAL(textChanged(QString)), this, SLOT(Button10CMDChanged(QString)));
+
+    connect(ui->cbVis, SIGNAL(stateChanged(int)), this, SLOT(visChanged(int)));
 }
 
 void Settings::LoadSettings()
@@ -117,6 +120,15 @@ void Settings::LoadSettings()
     ui->leCMD9->setText(settings->value("button9cmd").toString());
     ui->leButtonText10->setText(settings->value("button10text").toString());
     ui->leCMD10->setText(settings->value("button10cmd").toString());
+
+    if(settings->value("buttons_vis").toInt() == 1)
+    {
+        ui->cbVis->setChecked(false);
+    }
+    else if(settings->value("buttons_vis").toInt() == 0)
+    {
+        ui->cbVis->setChecked(true);
+    }
 
     settings->endGroup();
 }
@@ -341,4 +353,15 @@ void Settings::SetColors(QString foreground, QString background)
 
     ui->btnClose->setStyleSheet(QString("QPushButton{border: 2px solid; border-color: %1;} QPushButton:hover{background-color: %1; color: %2;}").arg(foreground).arg(background));
     ui->cmbTheme->setStyleSheet(QString("border: 2px solid; border-color: %1;").arg(foreground));
+    ui->cbVis->setStyleSheet(QString("QCheckBox::indicator{border: 1px solid; border-color: %1;} QCheckBox::indicator:checked{background-color: %1;}").arg(foreground));
+}
+
+void Settings::visChanged(int val)
+{
+    settings->beginGroup("Buttons");
+    if(val == 2)
+        settings->setValue("buttons_vis", "0");
+    else if(val == 0)
+        settings->setValue("buttons_vis", "1");
+    settings->endGroup();
 }
